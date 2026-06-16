@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loading prior λ = τ·z — interactive explainer (Run 2)</title>
+<style>
+:root{
+  color-scheme: light dark;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-text-primary:#1a1a18;
+  --color-text-secondary:#5f5e5a;
+  --color-text-tertiary:#8a8980;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f4f3ec;
+  --color-background-tertiary:#ecebe2;
+  --color-border-tertiary:rgba(0,0,0,0.12);
+  --color-background-success:#e1f5ee;
+  --color-text-success:#0f6e56;
+  --color-background-info:#e6f1fb;
+  --color-text-info:#185fa5;
+  --color-background-warning:#faeeda;
+  --color-text-warning:#854f0b;
+  --color-background-danger:#fcebeb;
+  --color-text-danger:#a32d2d;
+  --border-radius-md:8px;
+  --border-radius-lg:12px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --color-text-primary:#ececea;
+    --color-text-secondary:#b6b4ab;
+    --color-text-tertiary:#8a8980;
+    --color-background-primary:#1f1e1c;
+    --color-background-secondary:#2a2925;
+    --color-background-tertiary:#33322d;
+    --color-border-tertiary:rgba(255,255,255,0.14);
+    --color-background-success:#0c3a30;
+    --color-text-success:#5dcaa5;
+    --color-background-info:#0c2c4a;
+    --color-text-info:#85b7eb;
+    --color-background-warning:#3a2a0c;
+    --color-text-warning:#ef9f27;
+    --color-background-danger:#3a1414;
+    --color-text-danger:#f09595;
+  }
+}
+html,body{margin:0}
+body{background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);padding:28px 16px 64px;}
+button{font:inherit;padding:7px 12px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);border-radius:var(--border-radius-md);cursor:pointer;}
+button:hover{background:var(--color-background-secondary);}
+button:active{transform:scale(0.985);}
+input[type=range]{accent-color:#1D9E75;height:18px;cursor:pointer;}
+.page-title{max-width:680px;margin:0 auto 6px;font-size:22px;font-weight:600;}
+.page-sub{max-width:680px;margin:0 auto 18px;font-size:13px;color:var(--color-text-secondary);}
+</style>
+</head>
+<body>
+<div class="page-title">Loading prior &lambda; = &tau;&middot;z — interactive explainer</div>
+<div class="page-sub">Built from scratch, all four mechanisms, real Run-2 fitted loadings. Drag the sliders; pick a mechanism with the buttons.</div>
+
+<style>
+.ex-wrap{max-width:680px;margin:0 auto;font-family:var(--font-sans);color:var(--color-text-primary);line-height:1.65}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.ex-map{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:12px 14px;margin-bottom:14px}
+.ex-eq{font-size:20px;font-weight:500;text-align:center}
+.ex-eq sub{font-size:13px}
+.ex-live{font-size:13px;color:var(--color-text-secondary);text-align:center;margin-top:6px;font-family:var(--font-mono)}
+.ex-intro{font-size:12px;color:var(--color-text-tertiary);text-align:center;margin-top:4px}
+.ex-mechlab{font-size:12px;color:var(--color-text-tertiary);margin:0 0 6px}
+.ex-mechrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.ex-mechrow button{flex:1;min-width:120px}
+.ex-active{border:2px solid var(--color-text-primary)!important}
+.ex-sec{padding:18px 0;border-top:0.5px solid var(--color-border-tertiary)}
+.ex-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ex-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--color-background-secondary);font-size:12px;font-weight:500;flex:0 0 auto}
+.ex-t{font-size:16px;font-weight:500}
+.ex-tag{font-size:11px;padding:1px 8px;border-radius:var(--border-radius-md);font-weight:500}
+.ex-chosen{background:var(--color-background-success);color:var(--color-text-success)}
+.ex-derived{background:var(--color-background-info);color:var(--color-text-info)}
+.ex-p{font-size:14px;color:var(--color-text-secondary);margin:0 0 10px}
+.ex-p b{color:var(--color-text-primary);font-weight:500}
+.ex-ex{font-size:13px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;margin:0 0 12px}
+.ex-ex b{color:var(--color-text-primary);font-weight:500}
+.ex-ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ex-ctrl label{font-size:13px;color:var(--color-text-secondary)}
+.ex-ctrl input[type=range]{flex:1;min-width:120px}
+.ex-val{font-size:14px;font-weight:500;font-family:var(--font-mono);min-width:70px;text-align:right}
+.ex-cap{font-size:11px;color:var(--color-text-tertiary);margin-top:4px}
+.ex-wrap canvas{display:block;width:100%}
+.ex-metrics{display:flex;gap:10px;margin:6px 0 10px}
+.ex-mc{flex:1;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px}
+.ex-mc .t{font-size:11px;color:var(--color-text-tertiary)}
+.ex-mc .v{font-size:18px;font-weight:500}
+.ex-bar{height:16px;border-radius:4px}
+</style>
+<div class="ex-wrap">
+<h2 class="sr-only">An expanded scrollable interactive explainer for the loading prior lambda equals tau times z, covering all four mechanisms with real fitted values, deeper explanation in every section, a mechanism selector, and a final view of the complete ten by four loading matrix.</h2>
+
+<div class="ex-map">
+  <div class="ex-eq">&lambda;<sub>pk</sub> = &tau;<sub>k</sub> &middot; z<sub>pk</sub></div>
+  <div class="ex-live" id="exLive">corroded &rarr; r2:  &lambda; = 0.30 &times; 2.7 = 0.82  &rarr;  &times;2.34</div>
+  <div class="ex-intro">p = one of 10 SAWS parameters &nbsp;|&nbsp; k = one of 4 mechanisms &nbsp;|&nbsp; all numbers are your Run-2 fitted means</div>
+</div>
+
+<div class="ex-mechlab">Pick a mechanism (drives sections 4&ndash;9). Section 10 shows all four at once.</div>
+<div class="ex-mechrow">
+  <button class="js-mech" data-m="0" type="button">Capacity</button>
+  <button class="js-mech" data-m="1" type="button">Aged</button>
+  <button class="js-mech" data-m="2" type="button">Corroded</button>
+  <button class="js-mech" data-m="3" type="button">Aged&times;corroded</button>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">1</span><span class="ex-t">The goal, and the log-scale rule</span><span class="ex-tag ex-chosen">setup</span></div>
+  <p class="ex-p">We want a number <b>&lambda;</b> for each parameter&ndash;mechanism pair: how much mechanism k moves parameter p. There are 40 in all (10 parameters &times; 4 mechanisms) &mdash; the whole loading matrix &Lambda;.</p>
+  <p class="ex-p"><b>What is "the parameter"?</b> Each of the ten is a knob in the SAWS rule that sets the shape of the force&ndash;displacement loop: F0/F1 are backbone forces, S0 a stiffness, du a displacement, r1&ndash;r4 the slopes of its branches, alpha/beta the pinching and degradation. A loading says how a mechanism nudges one of those knobs.</p>
+  <p class="ex-p">The model works on a <b>log scale</b>, so a loading does not add to the parameter &mdash; it <b>multiplies</b> it by e<sup>&lambda;</sup>.</p>
+  <p class="ex-p"><b>Why a log scale?</b> These parameters are positive and act by proportion &mdash; "30% stiffer" means the same whether the base is large or small. Taking logs turns "multiply" into "add", so effects become additive and symmetric: a halving (×0.5) and a doubling (×2) sit the same distance from 0 (&minus;0.69 and +0.69). That symmetry is exactly why a plain bell centered at 0 is a fair prior.</p>
+  <div class="ex-ex"><b>Example.</b> &lambda; = 0 means &times;1 (no change). &lambda; = +0.214 (capacity&rarr;F1) means &times;1.24. &lambda; = &minus;0.197 (corroded&rarr;F1) means &times;0.82 (an 18% drop). &lambda; = +0.821 (corroded&rarr;r2) means &times;2.34. Drag to feel the rule.</div>
+  <div class="ex-ctrl"><label for="exL1">loading &lambda;</label><input id="exL1" type="range" min="-1" max="1" step="0.05" value="0.3"><span class="ex-val" id="exL1v">&lambda; = 0.30</span></div>
+  <div class="ex-metrics">
+    <div class="ex-mc"><div class="t">real multiplier e^&lambda;</div><div class="v" id="exL1m">&times;1.35</div></div>
+    <div class="ex-mc"><div class="t">change in the parameter</div><div class="v" id="exL1p">+35%</div></div>
+  </div>
+  <div class="ex-cap" style="margin-bottom:4px;">no effect (&times;1)</div>
+  <div class="ex-bar" style="width:130px;background:var(--color-text-tertiary);margin-bottom:8px;"></div>
+  <div class="ex-cap" style="margin-bottom:4px;">this loading applied</div>
+  <div class="ex-bar" id="exL1bar" style="width:175px;background:#1D9E75;"></div>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">2</span><span class="ex-t">What a prior is, and why it sits at 0</span><span class="ex-tag ex-chosen">chosen</span></div>
+  <p class="ex-p">A <b>prior</b> is your belief about a loading <i>before</i> looking at the data, drawn as a curve over its possible values. Tall = more believable.</p>
+  <p class="ex-p"><b>Reading the curve.</b> The whole area under it is your total belief (it sums to 1); the relative heights are relative plausibility. A tall, narrow curve says "I am fairly sure it is near here"; a low, wide one says "it could be many things."</p>
+  <p class="ex-p"><b>Why have one?</b> 40 unknowns from only 24 cells, each an average of 2 tests. The data alone would read random scatter as real effects. The prior says "most effects are modest; believe a big one only on strong evidence."</p>
+  <p class="ex-p"><b>Why not let the data speak alone?</b> The data enter through a second curve, the likelihood (how well each value explains the 24 cells), and Bayes' rule multiplies the two. With so little data the likelihood is broad for most loadings, so the prior keeps the answer sensible &mdash; and it steps aside wherever the data are sharp. <b>Why center at 0?</b> "No effect" is the honest default (&times;1). <b>Why symmetric?</b> A mechanism could push either way (corrosion lowers F1 but raises r2), so we do not pre-judge direction, only size. <b>Why a bell?</b> "Near 0 likely, far unlikely, symmetric" is exactly its shape.</p>
+  <div class="ex-ex"><b>Example.</b> Centering at +0.5 would assume, before any test, a +65% effect (e<sup>0.5</sup> &asymp; 1.65) &mdash; assuming the conclusion. Drag the center; we keep it at 0.</div>
+  <div class="ex-ctrl"><label for="exCen">center of the bell</label><input id="exCen" type="range" min="-1" max="1" step="0.1" value="0"><span class="ex-val" id="exCenv">0.0</span></div>
+  <canvas id="exCv2" style="height:170px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">3</span><span class="ex-t">Spread: the one knob</span><span class="ex-tag ex-chosen">chosen</span></div>
+  <p class="ex-p">A bell at 0 has one knob: the <b>spread</b> &sigma; &mdash; how far values typically sit from 0. Read on the real scale: &sigma; = 0.3 calls a typical effect about e<sup>0.3</sup> &asymp; &times;1.35; &sigma; = 1 would call &times;2.7 ordinary.</p>
+  <p class="ex-p"><b>The 68 / 95 reading.</b> For a normal, about 68% of the belief sits within &plusmn;&sigma; of the center and about 95% within &plusmn;2&sigma;. So &sigma; = 0.3 says: two-thirds of the time the effect is within &plusmn;0.3 (about &times;0.74 to &times;1.35), and you would be quite surprised past &plusmn;0.6 (about &times;0.55 to &times;1.8).</p>
+  <p class="ex-p"><b>Why one knob is enough.</b> A normal is completely described by just two numbers, its center and its spread. We have fixed the center at 0, so the spread is the only thing left to choose &mdash; which is what the next sections do.</p>
+  <div class="ex-ex"><b>Example.</b> A 50% effect (&lambda; &asymp; 0.4) is surprising at &sigma; = 0.3 (past one spread) but unremarkable at &sigma; = 1. Drag &sigma;.</div>
+  <div class="ex-ctrl"><label for="exSig">spread &sigma;</label><input id="exSig" type="range" min="0.3" max="2" step="0.1" value="1"><span class="ex-val" id="exSigv">&sigma; = 1.0</span></div>
+  <canvas id="exCv3" style="height:170px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">4</span><span class="ex-t">One shared spread per mechanism</span><span class="ex-tag ex-chosen">chosen</span></div>
+  <p class="ex-p">A mechanism's ten loadings are the same kind of quantity, so they <b>share one size</b> &tau; for the whole family &mdash; and the <b>data set it</b>, we do not fix it. Use the buttons above to switch mechanism; each has its own &tau;. Drag &tau;: all ten move together. Small &tau; pulls the family to 0 (the mechanism switches off); large &tau; lets them grow.</p>
+  <p class="ex-p"><b>Three options, and why this one.</b> No pooling = give every loading its own free spread (it over-fits noise). Full pooling = force all loadings to one common value (it hides real differences). <b>Partial pooling</b> = each mechanism's ten loadings share one learned spread &tau; &mdash; the middle path that borrows strength without erasing differences.</p>
+  <p class="ex-p"><b>How borrowing works.</b> A loading the data measure well (corroded r2) pushes &tau; up; a higher &tau; then widens the believable range for that mechanism's poorly-measured loadings, so each is judged against its own family rather than against zero. If a family's measured loadings are all small, &tau; collapses and drags the whole family toward 0. Because &tau; is learned per mechanism, the data effectively decide whether a mechanism matters at all.</p>
+  <div class="ex-ex"><b>Example from your fit.</b> Corrosion's family size is &tau; &asymp; 0.30 (led by r2). Aging's settled near 0.11 and the aged&times;corroded interaction's near 0.02 &mdash; nearly switched off, which is exactly why aging and synergy come out null. Capacity's is &asymp; 0.11, concentrated in F0/F1/S0.</div>
+  <div class="ex-ctrl"><label>shared size &tau;</label><input class="js-tau" type="range" min="0" max="0.9" step="0.01" value="0.30"><span class="ex-val js-tauval">&tau; = 0.30</span></div>
+  <canvas id="exCv4" style="height:150px"></canvas>
+  <div class="ex-cap">the selected mechanism's ten loadings, each = &tau; &times; its pattern value (r2 in coral)</div>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">5</span><span class="ex-t">The one real derivation (and why this form)</span><span class="ex-tag ex-derived">derived</span></div>
+  <p class="ex-p">The <b>only real math</b>: a standard bell (spread 1, draw z) multiplied by a fixed &tau; becomes a bell of spread &tau;. So "&lambda; ~ Normal(0, &tau;)" and "&lambda; = &tau;&middot;z, z ~ Normal(0,1)" are the same statement. We write the second &mdash; a re-write, not a new law.</p>
+  <p class="ex-p"><b>The algebra, slowly.</b> If you multiply a random quantity by a constant &tau;, its spread multiplies by &tau; too (its variance by &tau;&sup2;). Start with z, spread 1; then &tau;&middot;z has spread &tau;. Both z and &tau;&middot;z are bells centered at 0, and a bell is completely fixed by its center and spread &mdash; so "spread-&tau; bell" and "&tau; times a spread-1 bell" are literally the same object.</p>
+  <div class="ex-ex"><b>Example.</b> For corroded&rarr;r2: &tau; = 0.30, shape z = 2.7, so &lambda; = 0.30 &times; 2.7 = 0.82 &mdash; the fitted value. Raise &tau; to 0.60 and, same shape, &lambda; = 1.62.</div>
+  <p class="ex-p"><b>Second reason for the product:</b> it keeps the fitting program well-behaved. Picture the allowed loadings (up&ndash;down) against &tau; (left&ndash;right): in the direct form the allowed band pinches to a point as &tau;&rarr;0, a narrow neck a step-walking sampler cannot turn inside, so it stalls. As &tau;&middot;z, the walker explores z on flat ground (always spread 1) and only afterwards multiplies by &tau;. The standard name for this trick is the <b>non-centered parameterization</b>; it is the funnel your Chapter 4 handled in the K=2 model.</p>
+  <p class="ex-p">The top curve below (z) never changes; drag &tau; and only the bottom (&tau;&middot;z) stretches.</p>
+  <div class="ex-ctrl"><label>shared size &tau;</label><input class="js-tau" type="range" min="0" max="0.9" step="0.01" value="0.30"><span class="ex-val js-tauval">&tau; = 0.30</span></div>
+  <canvas id="exCv5" style="height:240px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">6</span><span class="ex-t">z is the pattern, not the size</span><span class="ex-tag ex-chosen">chosen</span></div>
+  <p class="ex-p">Because z has spread <b>exactly 1</b>, it carries only the <b>pattern</b> across the ten parameters &mdash; which are pushed, and which way &mdash; never the overall size, which is entirely in &tau;. The pattern below is the real fitted shape of the selected mechanism (each z = its loading &divide; &tau;).</p>
+  <p class="ex-p"><b>Why separating size and pattern matters.</b> If size and pattern were tangled in one set of numbers, you could double one and halve the other and get the same loadings &mdash; the model could not tell them apart. Fixing z to spread 1 removes that ambiguity: &tau; owns all the size, z owns only the shape.</p>
+  <p class="ex-p"><b>Reading the signs.</b> A positive z means the mechanism raises that parameter; negative means it lowers it. For corrosion the pattern reads "r2 up hard, F1 down, the rest small" &mdash; the physical story of damage moving into the post-peak branch.</p>
+  <div class="ex-ex"><b>Example.</b> Drag &tau; to resize the whole shape; drag r2's z to move only the coral point. Switch to aged and the pattern is flatter (its biggest is r2 at z &asymp; 1.7, but its &tau; is small, so the loading stays modest).</div>
+  <div class="ex-ctrl"><label>shared size &tau;</label><input class="js-tau" type="range" min="0" max="0.9" step="0.01" value="0.30"><span class="ex-val js-tauval">&tau; = 0.30</span></div>
+  <div class="ex-ctrl"><label>r2 shape z</label><input class="js-zr2" type="range" min="-1" max="3" step="0.1" value="2.7"><span class="ex-val js-zrval">z = 2.7</span></div>
+  <canvas id="exCv6" style="height:180px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">7</span><span class="ex-t">A prior for &tau;: the half-normal</span><span class="ex-tag ex-chosen">chosen</span></div>
+  <p class="ex-p">&tau; is a size, so it cannot be negative, and small sizes are more believable. The <b>half-normal</b> is the simplest positive-only "small more likely" curve &mdash; an ordinary bell folded at 0.</p>
+  <p class="ex-p"><b>Why a half-normal and not something heavier.</b> A half-Cauchy would also be positive-only but allows much larger &tau; far more often; the half-normal is gentler and lighter-tailed &mdash; firm regularization that still lets &tau; grow when the data insist. It is the standard "weakly-informative" choice for a hierarchical scale.</p>
+  <p class="ex-p"><b>A small subtlety.</b> The "0.3" is the half-normal's <i>scale</i>, not the standard deviation of &tau; itself. What it pins down cleanly is the average of &tau;&sup2; (it equals 0.3&sup2;), which is exactly the quantity the next section needs. <b>And the peak at 0 matters:</b> because the most believable &tau; is 0, the prior actively permits a mechanism to be off until the data argue otherwise &mdash; the engine behind the aging and interaction nulls.</p>
+  <div class="ex-ex"><b>Example.</b> HalfNormal(0.3) puts about 68% of its belief on &tau; below 0.3 (average &asymp; 0.24). Every mechanism's &tau; is drawn from this same prior; the data then raised corrosion's to ~0.30 and left the interaction's near 0.02. Drag the scale; it never enters the shaded, not-allowed side.</div>
+  <div class="ex-ctrl"><label for="exScale">half-normal scale</label><input id="exScale" type="range" min="0.1" max="0.8" step="0.05" value="0.3"><span class="ex-val" id="exScalev">0.30</span></div>
+  <canvas id="exCv7" style="height:170px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">8</span><span class="ex-t">The number 0.3, chosen then checked</span><span class="ex-tag ex-chosen">chosen</span></div>
+  <p class="ex-p">The 0.3 in HalfNormal(0.3) is <b>picked by hand</b>. On the log scale &plusmn;0.3 is about &plusmn;35%.</p>
+  <p class="ex-p"><b>What "weakly informative" means.</b> Strong enough to rule out absurd effects (&times;10, &times;100) and to pull 40 noisy candidates toward 0; weak enough that real evidence can move any single loading far past it. 0.3 threads that needle.</p>
+  <p class="ex-p"><b>The check, step by step (not a derivation of 0.3).</b> A loading's variance is the average of (&tau;&middot;z)&sup2;. Since &tau; and z are independent, that is (average of &tau;&sup2;) &times; (average of z&sup2;). A half-normal of scale 0.3 has average &tau;&sup2; = 0.3&sup2; = 0.09; a standard normal has average z&sup2; = 1. So variance = 0.09 and spread = &radic;0.09 = 0.3 &mdash; exactly the number we set, confirmed by the math, not produced by it.</p>
+  <div class="ex-ex"><b>Beatable, in numbers.</b> At scale 0.3, the fitted corroded r2 (0.82) is about 2.7 spreads from 0 &mdash; far, but reachable, and the data took it there. At 0.05 it would be ~16 spreads away (the prior would veto it); at 2.0 even random scatter would routinely clear the bar. Drag the scale and compare the typical band to the coral 0.82 mark.</div>
+  <div class="ex-ctrl"><label for="exS8">prior scale</label><input id="exS8" type="range" min="0.05" max="0.9" step="0.05" value="0.3"><span class="ex-val" id="exS8v">0.30</span></div>
+  <canvas id="exCv8" style="height:150px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">9</span><span class="ex-t">Put one mechanism together</span><span class="ex-tag ex-chosen">overall</span></div>
+  <p class="ex-p">All ten loadings of the selected mechanism: &lambda; = &tau;&middot;z, the bar is the loading, the right label is the real multiplier e<sup>&lambda;</sup>.</p>
+  <p class="ex-p"><b>How to read it.</b> Each bar runs left (lowers the parameter) or right (raises it). Coral bars are the <b>credible</b> effects &mdash; their 94% interval clears a small "practically zero" band (the ROPE); the others are undecided at this design's resolution. The coral tick marks the fitted value, so when you drag &tau; away from the fitted size you can watch your setting drift off the real answer.</p>
+  <div class="ex-ex"><b>Example.</b> Corroded shows two coral bars (F1 down to &times;0.82, r2 more than doubled to &times;2.34); capacity shows three (F0, F1, S0); aged and the interaction show none &mdash; every bar near &times;1, the visual signature of a null family.</div>
+  <div class="ex-ctrl"><label>shared size &tau;</label><input class="js-tau" type="range" min="0" max="0.9" step="0.01" value="0.30"><span class="ex-val js-tauval">&tau; = 0.30</span></div>
+  <div class="ex-ctrl"><label>r2 shape z</label><input class="js-zr2" type="range" min="-1" max="3" step="0.1" value="2.7"><span class="ex-val js-zrval">z = 2.7</span></div>
+  <canvas id="exCv9" style="height:300px"></canvas>
+</div>
+
+<div class="ex-sec">
+  <div class="ex-h"><span class="ex-num">10</span><span class="ex-t">The full picture: all four mechanisms</span><span class="ex-tag ex-chosen">overall</span></div>
+  <p class="ex-p">The complete loading matrix &Lambda; (10 parameters &times; 4 mechanisms), all real fitted means.</p>
+  <p class="ex-p"><b>How to read the grid.</b> Rows are the ten parameters, columns the four mechanisms; color shows sign and strength (teal raises, blue lowers, stronger color = larger), and a coral outline marks a credible effect. These are <i>contrasts</i> (effect-coded &plusmn;&frac12;), so "corroded" is the full corroded-vs-not difference at average aging.</p>
+  <canvas id="exCv10" style="height:330px"></canvas>
+  <div class="ex-ex"><b>The whole story.</b> <b>Capacity</b> credibly raises F0, F1, S0 (the code anchor &mdash; bigger nails / denser species are stronger). <b>Corroded</b> drops F1 ~18% and more than doubles the post-peak slope r2 (&times;2.34) &mdash; damage concentrated in the post-peak branch. <b>Aged</b>: all ten undecided. <b>Aged&times;corroded</b>: all ten undecided &mdash; no resolvable synergy. The two null families are exactly the ones whose shared &tau; the data pulled toward 0.</div>
+  <p class="ex-p"><b>One caveat, kept honest.</b> The capacity column is anchor-interpreted: capacity is a fixed function of species and size in this design (an aliasing limit), so read its column as "tracking the code-predicted strength," not as a freely estimated effect.</p>
+</div>
+</div>
+
+<script>
+(function(){
+var PARAMS=["F0","F1","du","S0","r1","r2","r3","r4","alpha","beta"],R2=5;
+var MNAMES=["capacity","aged","corroded","aged×corr"];
+var LAM=[
+ [0.158,0.214,0.031,0.130,-0.006,-0.075,-0.113,-0.096,0.026,0.012],
+ [-0.060,-0.119,0.069,-0.144,0.093,0.182,0.078,0.072,-0.126,0.004],
+ [0.094,-0.197,0.254,-0.003,0.204,0.821,0.096,-0.059,-0.227,0.029],
+ [-0.002,0.012,-0.008,0.035,0.006,-0.015,-0.044,-0.007,0.006,0.009]
+];
+var VERD=[
+ [1,1,0,1,0,0,0,0,0,0],
+ [0,0,0,0,0,0,0,0,0,0],
+ [0,1,0,0,0,1,0,0,0,0],
+ [0,0,0,0,0,0,0,0,0,0]
+];
+function rms(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i]*a[i];return Math.sqrt(s/a.length);}
+var TAU=[],ZPAT=[];for(var m=0;m<4;m++){var t=rms(LAM[m]);TAU.push(t);var zp=[];for(var p=0;p<10;p++)zp.push(LAM[m][p]/t);ZPAT.push(zp);}
+var st={mech:2,tau:TAU[2],z:ZPAT[2].slice(),center:0,sigma:1.0,scale7:0.30,s8:0.30,l1:0.30};
+var TEAL="#1D9E75",BLUE="#378ADD",AMBER="#BA7517",CORAL="#D85A30";
+function cssv(n,fb){var v=getComputedStyle(document.documentElement).getPropertyValue(n).trim();return v||fb;}
+function ts(){return cssv("--color-text-secondary","#888");}
+function tt(){return cssv("--color-text-tertiary","#aaa");}
+function tp(){return cssv("--color-text-primary","#222");}
+function setup(cv){var dpr=window.devicePixelRatio||1,W=cv.clientWidth||620,H=cv.clientHeight||160;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);var ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);return{ctx:ctx,W:W,H:H};}
+function bellTo(ctx,mx,my,mu,sig,x0,x1,color,lw,dash){ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.setLineDash(dash||[]);ctx.beginPath();for(var i=0;i<=200;i++){var v=x0+(x1-x0)*i/200,d=(v-mu)/sig,h=Math.exp(-0.5*d*d),px=mx(v),py=my(h);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.stroke();ctx.setLineDash([]);}
+
+function draw1(){var lam=st.l1,m=Math.exp(lam);document.getElementById("exL1v").innerHTML="&lambda; = "+lam.toFixed(2);document.getElementById("exL1m").textContent="×"+m.toFixed(2);var pct=Math.round((m-1)*100);document.getElementById("exL1p").textContent=(pct>=0?"+":"")+pct+"%";document.getElementById("exL1bar").style.width=Math.round(130*m)+"px";}
+function draw2(){
+ var o=setup(document.getElementById("exCv2")),ctx=o.ctx,W=o.W,H=o.H,padL=12,padT=14,padB=26,pW=W-24,pH=H-padT-padB,base=padT+pH,x0=-3.3,x1=3.3;
+ function mx(v){return padL+(v-x0)/(x1-x0)*pW;}function my(h){return padT+pH*(1-h*0.9);}
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,base);ctx.lineTo(padL+pW,base);ctx.stroke();
+ ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(mx(0),padT);ctx.lineTo(mx(0),base);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle=tt();ctx.font="11px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText("0",mx(0),base+5);
+ bellTo(ctx,mx,my,st.center,1,x0,x1,TEAL,2);
+ ctx.strokeStyle=CORAL;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(mx(st.center),my(1));ctx.lineTo(mx(st.center),base);ctx.stroke();
+ ctx.fillStyle=tp();ctx.font="12px sans-serif";ctx.textBaseline="bottom";ctx.fillText(st.center===0?"most believable: no effect (our choice)":"most believable: "+st.center.toFixed(1)+" (assumes an effect)",mx(st.center),my(1)-4);
+}
+function draw3(){
+ var o=setup(document.getElementById("exCv3")),ctx=o.ctx,W=o.W,H=o.H,padL=12,padT=18,padB=26,pW=W-24,pH=H-padT-padB,base=padT+pH,x0=-3.6,x1=3.6,sig=st.sigma;
+ function mx(v){return padL+(v-x0)/(x1-x0)*pW;}function my(h){return padT+pH*(1-h*0.9);}
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,base);ctx.lineTo(padL+pW,base);ctx.stroke();
+ bellTo(ctx,mx,my,0,sig,x0,x1,TEAL,2);
+ ctx.strokeStyle=ts();ctx.setLineDash([4,3]);[-sig,sig].forEach(function(v){ctx.beginPath();ctx.moveTo(mx(v),my(Math.exp(-0.5)));ctx.lineTo(mx(v),base);ctx.stroke();});ctx.setLineDash([]);
+ ctx.fillStyle=ts();ctx.font="12px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText("−σ",mx(-sig),base+6);ctx.fillText("0",mx(0),base+6);ctx.fillText("+σ",mx(sig),base+6);
+ ctx.fillStyle=tt();ctx.fillText("typical effect about ×"+Math.exp(sig).toFixed(2),mx(0),padT-2);
+}
+function draw4(){
+ var o=setup(document.getElementById("exCv4")),ctx=o.ctx,W=o.W,H=o.H,padL=12,midY=H/2,pW=W-24,x0=-1.3,x1=1.3;
+ function mx(v){return padL+(v-x0)/(x1-x0)*pW;}
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,midY);ctx.lineTo(padL+pW,midY);ctx.stroke();
+ ctx.strokeStyle=ts();ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(mx(0),14);ctx.lineTo(mx(0),H-18);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle=tt();ctx.font="11px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText("0",mx(0),H-15);
+ for(var i=0;i<10;i++){var lam=Math.max(-1.3,Math.min(1.3,st.tau*st.z[i])),x=mx(lam),y=midY+((i%2)?-1:1)*(Math.floor(i/2)*10+9);ctx.fillStyle=i===R2?CORAL:(lam>=0?TEAL:BLUE);ctx.beginPath();ctx.arc(x,y,i===R2?6:5,0,7);ctx.fill();}
+}
+function draw5(){
+ var o=setup(document.getElementById("exCv5")),ctx=o.ctx,W=o.W,H=o.H,x0=-4,x1=4,padL=12,pW=W-24,sig=Math.max(st.tau,0.04);
+ function mx(v){return padL+(v-x0)/(x1-x0)*pW;}
+ function panel(top,h,s,color,label){var padT=top+16,pH=h-30,base=padT+pH;function my(hh){return padT+pH*(1-hh*0.9);}ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,base);ctx.lineTo(padL+pW,base);ctx.stroke();bellTo(ctx,mx,my,0,s,x0,x1,color,2);ctx.strokeStyle=ts();ctx.setLineDash([4,3]);[-s,s].forEach(function(v){ctx.beginPath();ctx.moveTo(mx(v),my(Math.exp(-0.5)));ctx.lineTo(mx(v),base);ctx.stroke();});ctx.setLineDash([]);ctx.fillStyle=tp();ctx.font="12px sans-serif";ctx.textAlign="left";ctx.textBaseline="alphabetic";ctx.fillText(label,padL+2,top+12);}
+ panel(0,H/2,1,tt(),"z — spread always 1");
+ panel(H/2,H/2,sig,TEAL,"τ · z — spread = τ = "+st.tau.toFixed(2));
+}
+function draw6(){
+ var o=setup(document.getElementById("exCv6")),ctx=o.ctx,W=o.W,H=o.H,mid=H/2,padL=30,n=10,step=(W-60)/(n-1),mxz=2.9,amp=(H*0.38)/mxz;
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.setLineDash([5,4]);ctx.beginPath();ctx.moveTo(padL,mid);ctx.lineTo(W-30,mid);ctx.stroke();ctx.setLineDash([]);
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.globalAlpha=0.45;ctx.beginPath();
+ for(var i=0;i<n;i++){var x=padL+i*step,y=mid-st.z[i]*amp;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();ctx.globalAlpha=1;
+ ctx.strokeStyle=TEAL;ctx.lineWidth=2;ctx.beginPath();
+ for(var j=0;j<n;j++){var x2=padL+j*step,y2=mid-st.tau*st.z[j]*amp;if(j===0)ctx.moveTo(x2,y2);else ctx.lineTo(x2,y2);}ctx.stroke();
+ for(var k=0;k<n;k++){var xx=padL+k*step,yy=mid-st.tau*st.z[k]*amp;ctx.fillStyle=k===R2?CORAL:TEAL;ctx.beginPath();ctx.arc(xx,yy,k===R2?5.5:4,0,7);ctx.fill();ctx.fillStyle=tt();ctx.font="10px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText(PARAMS[k],xx,mid+amp*mxz*0.5);}
+}
+function draw7(){
+ var o=setup(document.getElementById("exCv7")),ctx=o.ctx,W=o.W,H=o.H,padL=12,padT=14,padB=24,pW=W-24,pH=H-padT-padB,base=padT+pH,x0=-1,x1=1,s=st.scale7;
+ function mx(v){return padL+(v-x0)/(x1-x0)*pW;}function my(h){return padT+pH*(1-h*0.9);}
+ ctx.fillStyle="rgba(216,90,48,0.10)";ctx.fillRect(padL,padT,mx(0)-padL,pH);
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,base);ctx.lineTo(padL+pW,base);ctx.stroke();ctx.beginPath();ctx.moveTo(mx(0),padT);ctx.lineTo(mx(0),base);ctx.stroke();
+ ctx.strokeStyle=TEAL;ctx.lineWidth=2.5;ctx.beginPath();var started=false;
+ for(var i=0;i<=200;i++){var v=x1*i/200,h=Math.exp(-(v*v)/(2*s*s)),px=mx(v),py=my(h);if(!started){ctx.moveTo(px,py);started=true;}else ctx.lineTo(px,py);}ctx.stroke();
+ ctx.fillStyle=ts();ctx.font="12px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText("0",mx(0),base+5);ctx.fillText("not allowed",mx(-0.5),base+5);
+}
+function draw8(){
+ var o=setup(document.getElementById("exCv8")),ctx=o.ctx,W=o.W,H=o.H,padL=12,midY=H/2,pW=W-24,x0=-1.1,x1=1.1,s=st.s8;
+ function mx(v){return padL+(v-x0)/(x1-x0)*pW;}
+ ctx.fillStyle="rgba(29,158,117,0.16)";ctx.fillRect(mx(-s),midY-26,mx(s)-mx(-s),52);
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(padL,midY);ctx.lineTo(padL+pW,midY);ctx.stroke();
+ ctx.strokeStyle=ts();ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(mx(0),midY-30);ctx.lineTo(mx(0),midY+30);ctx.stroke();ctx.setLineDash([]);
+ var fit=Math.min(0.82,x1);ctx.strokeStyle=CORAL;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(mx(fit),midY-34);ctx.lineTo(mx(fit),midY+34);ctx.stroke();
+ ctx.fillStyle=CORAL;ctx.font="11px sans-serif";ctx.textAlign="center";ctx.textBaseline="bottom";ctx.fillText("corroded r2 = 0.82",mx(fit),midY-36);
+ ctx.fillStyle=ts();ctx.font="11px sans-serif";ctx.textBaseline="top";ctx.fillText("−"+s.toFixed(2),mx(-s),midY+30);ctx.fillText("+"+s.toFixed(2),mx(s),midY+30);ctx.fillText("0",mx(0),midY+30);
+}
+function draw9(){
+ var o=setup(document.getElementById("exCv9")),ctx=o.ctx,W=o.W,H=o.H;
+ var gutter=52,rightPad=66,padT=8,padB=8,plotL=gutter,plotR=W-rightPad,plotW=plotR-plotL,center=plotL+plotW/2,usable=H-padT-padB,step=usable/10,KS=1.6,k=(plotW/2)/KS;
+ ctx.strokeStyle=tt();ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(center,padT);ctx.lineTo(center,H-padB);ctx.stroke();
+ for(var p=0;p<10;p++){
+  var y=padT+step*(p+0.5),lam=st.tau*st.z[p],m=Math.exp(lam),drawn=Math.max(-KS,Math.min(KS,lam)),x2=center+drawn*k,bh=Math.min(step*0.5,15),rj=VERD[st.mech][p];
+  ctx.fillStyle=tp();ctx.textAlign="right";ctx.font="12px monospace";ctx.textBaseline="middle";ctx.fillText(PARAMS[p],gutter-8,y);
+  ctx.fillStyle=rj?CORAL:(lam>=0?TEAL:BLUE);ctx.fillRect(Math.min(center,x2),y-bh/2,Math.abs(x2-center),bh);
+  ctx.fillStyle=ts();ctx.textAlign="left";ctx.font="11px sans-serif";ctx.fillText("×"+m.toFixed(2),plotR+6,y);
+  if(rj){var fv=Math.max(-KS,Math.min(KS,LAM[st.mech][p])),fx=center+fv*k;ctx.strokeStyle=CORAL;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(fx,y-step*0.42);ctx.lineTo(fx,y+step*0.42);ctx.stroke();}
+ }
+ ctx.fillStyle=tt();ctx.font="10px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillText("loading λ for "+MNAMES[st.mech],center,padT);
+}
+function draw10(){
+ var o=setup(document.getElementById("exCv10")),ctx=o.ctx,W=o.W,H=o.H;
+ var gutter=50,headH=22,colW=(W-gutter)/4,rowH=(H-headH)/10;
+ ctx.font="11px sans-serif";ctx.textBaseline="middle";
+ for(var m=0;m<4;m++){ctx.fillStyle=tp();ctx.textAlign="center";ctx.fillText(MNAMES[m],gutter+m*colW+colW/2,headH/2);}
+ for(var p=0;p<10;p++){var y=headH+p*rowH;ctx.fillStyle=tp();ctx.textAlign="right";ctx.font="11px monospace";ctx.fillText(PARAMS[p],gutter-6,y+rowH/2);ctx.font="11px sans-serif";
+  for(var q=0;q<4;q++){var val=LAM[q][p],x=gutter+q*colW,col=val>=0?"29,158,117":"55,138,221",a=Math.min(Math.abs(val)/0.5,1)*0.72+0.06;ctx.fillStyle="rgba("+col+","+a+")";ctx.fillRect(x+1,y+1,colW-2,rowH-2);
+   if(VERD[q][p]){ctx.strokeStyle=CORAL;ctx.lineWidth=2;ctx.strokeRect(x+2,y+2,colW-4,rowH-4);}
+   ctx.fillStyle=(VERD[q][p]||Math.abs(val)>0.15)?tp():ts();ctx.textAlign="center";ctx.fillText(val.toFixed(2),x+colW/2,y+rowH/2);}}
+}
+
+function header(){var lam=st.tau*st.z[R2],m=Math.exp(lam);document.getElementById("exLive").innerHTML=MNAMES[st.mech]+" &rarr; r2:  &lambda; = "+st.tau.toFixed(2)+" &times; "+st.z[R2].toFixed(1)+" = "+lam.toFixed(2)+"  &rarr;  &times;"+m.toFixed(2);}
+function redrawAll(){draw1();draw2();draw3();draw4();draw5();draw6();draw7();draw8();draw9();draw10();header();}
+
+function setTau(v){st.tau=v;var a=document.querySelectorAll(".js-tau");for(var i=0;i<a.length;i++)a[i].value=v.toFixed(2);var b=document.querySelectorAll(".js-tauval");for(var j=0;j<b.length;j++)b[j].innerHTML="&tau; = "+v.toFixed(2);redrawAll();}
+function setZ(v){st.z[R2]=v;var a=document.querySelectorAll(".js-zr2");for(var i=0;i<a.length;i++)a[i].value=v.toFixed(1);var b=document.querySelectorAll(".js-zrval");for(var j=0;j<b.length;j++)b[j].textContent="z = "+v.toFixed(1);redrawAll();}
+function setMech(i){st.mech=i;st.tau=TAU[i];st.z=ZPAT[i].slice();var bs=document.querySelectorAll(".js-mech");for(var b=0;b<bs.length;b++){bs[b].classList.toggle("ex-active",b===i);bs[b].setAttribute("aria-pressed",b===i?"true":"false");}var ta=document.querySelectorAll(".js-tau");for(var t=0;t<ta.length;t++)ta[t].value=st.tau.toFixed(2);var tv=document.querySelectorAll(".js-tauval");for(var v=0;v<tv.length;v++)tv[v].innerHTML="&tau; = "+st.tau.toFixed(2);var za=document.querySelectorAll(".js-zr2");for(var z=0;z<za.length;z++)za[z].value=st.z[R2].toFixed(1);var zv=document.querySelectorAll(".js-zrval");for(var w=0;w<zv.length;w++)zv[w].textContent="z = "+st.z[R2].toFixed(1);redrawAll();}
+
+(function wire(){
+ var ta=document.querySelectorAll(".js-tau");for(var i=0;i<ta.length;i++)ta[i].addEventListener("input",function(e){setTau(parseFloat(e.target.value));});
+ var za=document.querySelectorAll(".js-zr2");for(var j=0;j<za.length;j++)za[j].addEventListener("input",function(e){setZ(parseFloat(e.target.value));});
+ var me=document.querySelectorAll(".js-mech");for(var n=0;n<me.length;n++)me[n].addEventListener("click",function(e){setMech(parseInt(e.currentTarget.getAttribute("data-m"),10));});
+ document.getElementById("exL1").addEventListener("input",function(e){st.l1=parseFloat(e.target.value);draw1();});
+ document.getElementById("exCen").addEventListener("input",function(e){st.center=parseFloat(e.target.value);document.getElementById("exCenv").textContent=st.center.toFixed(1);draw2();});
+ document.getElementById("exSig").addEventListener("input",function(e){st.sigma=parseFloat(e.target.value);document.getElementById("exSigv").innerHTML="&sigma; = "+st.sigma.toFixed(1);draw3();});
+ document.getElementById("exScale").addEventListener("input",function(e){st.scale7=parseFloat(e.target.value);document.getElementById("exScalev").textContent=st.scale7.toFixed(2);draw7();});
+ document.getElementById("exS8").addEventListener("input",function(e){st.s8=parseFloat(e.target.value);document.getElementById("exS8v").textContent=st.s8.toFixed(2);draw8();});
+ window.addEventListener("resize",redrawAll);
+})();
+setMech(2);
+})();
+</script>
+</body>
+</html>
